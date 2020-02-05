@@ -24,6 +24,6 @@ def getData():
 
     for file in files:
         image = loadImagesFromFile(file)
-        images.extend(image)
+        images.append(image)
 
     return images
