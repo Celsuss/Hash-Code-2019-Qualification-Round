@@ -1,11 +1,6 @@
 
 
-def calculateScore(slides):
-    
-
-    return 0
-
-def geTagsInfo(images):
+def getTagsInfo(images):
     images_info = {}
     for image in images:
         for tag in image.tags:
@@ -15,6 +10,11 @@ def geTagsInfo(images):
                 images_info[tag] = 1
 
     return images_info
+
+def updateTagsInfo(tags_info, remove_tags):
+    for tag in remove_tags:
+        tags_info[tag] = tags_info[tag] - 1
+    return tags_info
 
 def getImageWithTag(images, tag, other_tags=[]):
     for image in images:
@@ -102,3 +102,22 @@ def getNoneInterestingImages(images, tags_info):
             none_interesting_images.append(image)
 
     return none_interesting_images
+
+def splitIntoHorizontalAndVerical(images):
+    horizontal_images = []
+    vertical_images = []
+
+    for image in images:
+        if image.alignment == 'H':
+            horizontal_images.append(image)
+        else:
+            vertical_images.append(image)
+
+    return horizontal_images, vertical_images
+
+def removeImageFromList(remove_image, images):
+    for image in images:
+        if image == remove_image:
+            images.remove(image)
+
+    return images
