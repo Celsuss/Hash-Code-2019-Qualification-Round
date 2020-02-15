@@ -67,7 +67,7 @@ def getMostInterestingImage(images, tags_info):
             
     return None
 
-def getMinimumInterestingImages(images, tags_info):     # cat, beach, sun    # Selfie, smile
+def getMinimumInterestingImages(images, tags_info):
     minimum_tags = getTagsWithScore(tags_info, 2)
     none_tags = getTagsWithScore(tags_info, 1)
     minimum_interesting_images = []
