@@ -45,6 +45,9 @@ def getTagsWithScore(tags_info, tag_score, excluded_tag=None):
         if tags_info[tag_info_key] >= tag_score and tag_info_key is not excluded_tag:
             tags.append(tag_info_key)
 
+    if len(tags) == 0 and tag_score >= 3:
+        return getTagsWithScore(tags_info, tag_score-1, excluded_tag)
+
     return tags
 
 def getMostInterestingImage(images, tags_info):
@@ -65,6 +68,6 @@ def getMostInterestingImage(images, tags_info):
     return None
 
 def getNoneInterestingImages(images, tags_info):
-    
+
 
     return 0
