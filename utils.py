@@ -18,11 +18,11 @@ def geTagsInfo(images):
 
 def getImageWithTag(images, tag, other_tags=[]):
     for image in images:
-        if tag in image.tags:
+        if tag in image.tags and len(other_tags) >= 1:
             for other_tag in other_tags:
                 if other_tag in image.tags:
                     return image
-        else:
+        elif tag in image.tags:
             return image
             
     return None
@@ -42,7 +42,7 @@ def getTagsWithScore(tags_info, tag_score, excluded_tag=None):
     tags = []
 
     for tag_info_key in tags_info:
-        if tags_info[tag_info_key] >= tag_score and tag_info_key is not excluded_tag:
+        if tags_info[tag_info_key] == tag_score and tag_info_key is not excluded_tag:
             tags.append(tag_info_key)
 
     if len(tags) == 0 and tag_score >= 3:
@@ -67,7 +67,38 @@ def getMostInterestingImage(images, tags_info):
             
     return None
 
+def getMinimumInterestingImages(images, tags_info):     # cat, beach, sun    # Selfie, smile
+    minimum_tags = getTagsWithScore(tags_info, 2)
+    none_tags = getTagsWithScore(tags_info, 1)
+    minimum_interesting_images = []
+
+    for image in images:
+        add = True
+        current_none_tags = []
+        
+        for tag in image.tags:
+            if tag not in minimum_tags and tag not in none_tags:
+                add = False
+                break
+            elif tag in none_tags:
+                current_none_tags.append(tag)
+
+        if add is True and len(image.tags) - len(current_none_tags) == 1:
+            minimum_interesting_images.append(image)
+
+    return minimum_interesting_images
+
 def getNoneInterestingImages(images, tags_info):
+    tags = getTagsWithScore(tags_info, 1)
+    none_interesting_images = []
 
+    for image in images:
+        add = True
+        for tag in image.tags:
+            if tag not in tags:
+                add = False
+                break
+        if add is True:
+            none_interesting_images.append(image)
 
-    return 0
+    return none_interesting_images

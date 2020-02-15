@@ -6,7 +6,9 @@ def createSlides(images):
     slides = []
 
     
-    image = utils.getMostInterestingImage(images, tags_info)
+    best_image = utils.getMostInterestingImage(images, tags_info)
+    none_images = utils.getNoneInterestingImages(images, tags_info)
+    minimum_images = utils.getMinimumInterestingImages(images, tags_info)
 
     return 0
 
