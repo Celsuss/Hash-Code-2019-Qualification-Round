@@ -122,6 +122,12 @@ def removeImageFromList(remove_image, images):
 
     return images
 
+def removeSlideImagesFromList(remove_slide, images):
+    for remove_image in remove_slide:
+        images.remove(remove_image)
+
+    return images
+
 def getTagsInSlide(slide):
     tags = []
     for image in slide:
@@ -130,3 +136,7 @@ def getTagsInSlide(slide):
                 tags.append(tag)
 
     return tags
+
+def hasOverlappingTags(image_1, image_2):
+
+    return 0

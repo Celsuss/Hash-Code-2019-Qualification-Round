@@ -10,19 +10,29 @@ def createSlides(images):
     # Photo 3: Garden, cat           -> Photos 1,2: Selfie, smile, garden, selfie     :     (score 1)
 
     
-    best_image = utils.getMostInterestingImage(images, tags_info)
-    none_images = utils.getNoneInterestingImages(images, tags_info)
-    minimum_images = utils.getMinimumInterestingImages(images, tags_info)
+    # best_image = utils.getMostInterestingImage(images, tags_info)
+    # none_images = utils.getNoneInterestingImages(images, tags_info)
 
+    minimum_images = utils.getMinimumInterestingImages(images, tags_info)
     minimum_horizontal_images, minimum_vertical_images = utils.splitIntoHorizontalAndVerical(minimum_images)
 
     slides.append([minimum_horizontal_images[0]])
-    tags_info = utils.updateTagsInfo(tags_info, slides[-1][0].tags)
-    minimum_horizontal_images = utils.removeImageFromList(slides[-1], minimum_horizontal_images)
-    images = utils.removeImageFromList(slides[-1], images)
+
+    # tags_info = utils.updateTagsInfo(tags_info, slides[-1][0].tags)
+    # minimum_horizontal_images = utils.removeImageFromList(slides[-1], minimum_horizontal_images)
+    images = utils.removeSlideImagesFromList(slides[-1], images)
 
     test_score = score.calculateScoreBetweenSlides(slides[0], [images[-1]])
     test_score = score.calculateScoreBetweenSlides(slides[0], [images[1], images[2]])
+
+    slide = score.getBestNextSlide(slides[-1], images)
+    slide_score = score.calculateScoreBetweenSlides(slides[-1], slide)
+
+    while slide_score > 0:
+        slides.append(slide)
+        images = utils.removeSlideImagesFromList(slides[-1], images)
+        slide = score.getBestNextSlide(slides[-1], images)
+        slide_score = score.calculateScoreBetweenSlides(slides[-1], slide)
 
     return 0
 
