@@ -34,6 +34,9 @@ def calculateScoreBetweenSlides(slide_1, slide_2):
     return score
 
 def getBestNextSlide(current_slide, images, only_vertical=False):
+    if len(images) == 0:
+        return None
+
     images_score = []
     for image in images:
         images_score.append(calculateScoreBetweenSlides(current_slide, [image]))
@@ -41,16 +44,18 @@ def getBestNextSlide(current_slide, images, only_vertical=False):
     best_image = images[np.argmax(images_score)]
 
     if best_image.alignment == 'H' and only_vertical == True:
-        images = utils.removeImageFromList(best_image, images)
+        images.remove(best_image)
         return getBestNextSlide(current_slide, images, only_vertical=only_vertical)
-
-    if best_image.alignment == 'H':
+    elif best_image.alignment == 'V' and only_vertical == True:
+        return best_image
+    elif best_image.alignment == 'H':
         return [best_image]
 
-    # images_score.remove(np.argmin(images_score))
-    images = utils.removeImageFromList(best_image, images)
+    images.remove(best_image)
+    second_image = getBestNextSlide([best_image], images, only_vertical=True)
+    if second_image is None:
+        return None
 
-    second_image = getBestNextSlide(current_slide, images, only_vertical=True)
     return [best_image, second_image]
 
 def calculateScore(slides):

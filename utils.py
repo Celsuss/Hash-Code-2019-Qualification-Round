@@ -115,13 +115,6 @@ def splitIntoHorizontalAndVerical(images):
 
     return horizontal_images, vertical_images
 
-def removeImageFromList(remove_image, images):
-    for image in images:
-        if image == remove_image:
-            images.remove(image)
-
-    return images
-
 def removeSlideImagesFromList(remove_slide, images):
     for remove_image in remove_slide:
         images.remove(remove_image)
