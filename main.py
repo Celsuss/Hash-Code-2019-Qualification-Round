@@ -1,5 +1,6 @@
 import data
 import utils
+import score
 
 def createSlides(images):
     tags_info = utils.getTagsInfo(images)
@@ -15,9 +16,13 @@ def createSlides(images):
 
     minimum_horizontal_images, minimum_vertical_images = utils.splitIntoHorizontalAndVerical(minimum_images)
 
-    slides.append(minimum_vertical_images[0])
-    tags_info = utils.updateTagsInfo(tags_info, minimum_vertical_images[0])
-    minimum_vertical_images = utils.removeImageFromList(minimum_vertical_images[0], minimum_vertical_images)
+    slides.append([minimum_horizontal_images[0]])
+    tags_info = utils.updateTagsInfo(tags_info, slides[-1][0].tags)
+    minimum_horizontal_images = utils.removeImageFromList(slides[-1], minimum_horizontal_images)
+    images = utils.removeImageFromList(slides[-1], images)
+
+    test_score = score.calculateScoreBetweenSlides(slides[0], [images[-1]])
+    test_score = score.calculateScoreBetweenSlides(slides[0], [images[1], images[2]])
 
     return 0
 

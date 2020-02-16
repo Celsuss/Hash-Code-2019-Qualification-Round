@@ -121,3 +121,12 @@ def removeImageFromList(remove_image, images):
             images.remove(image)
 
     return images
+
+def getTagsInSlide(slide):
+    tags = []
+    for image in slide:
+        for tag in image.tags:
+            if tag not in tags:
+                tags.append(tag)
+
+    return tags
