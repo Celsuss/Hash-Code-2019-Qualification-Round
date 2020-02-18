@@ -58,6 +58,11 @@ def getBestNextSlide(current_slide, images, only_vertical=False):
 
     return [best_image, second_image]
 
-def calculateScore(slides):
+def calculateSlidesScore(slides):
+    score = 0
+    for i in range(len(slides)-1):
+        slide_1 = slides[i]
+        slide_2 = slides[i+1]
+        score += calculateScoreBetweenSlides(slide_1, slide_2)
 
-    return 0
+    return score

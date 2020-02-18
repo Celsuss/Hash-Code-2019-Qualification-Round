@@ -25,7 +25,9 @@ def createSlides(images):
         utils.removeSlideImagesFromList(slides[-1], images)
         slide = score.getBestNextSlide(slides[-1], images.copy())
 
-    return 0
+    total_score = score.calculateSlidesScore(slides)
+
+    return total_score
 
 def main():
     image_sets = data.getData()
