@@ -1,8 +1,9 @@
 
 class TagInfo:
     name = ""
-    score = 0
+    score = 1
     images = []
+    alignments = []
 
 def getTagsInfo(images):
     images_info = {}
@@ -138,6 +139,8 @@ def hasOverlappingTags(image_1, image_2):
 
     return 0
 
+# Optimized functions
+
 def generateTagsDict(images):
     tags_dict = {}
     for image in images:
@@ -146,9 +149,12 @@ def generateTagsDict(images):
                 tag_info = TagInfo()
                 tag_info.name = tag
                 tag_info.images = []
+                tag_info.alignments = [image.alignment]
                 tags_dict[tag] = tag_info
             else:
                 tags_dict[tag].score += 1
+                if image.alignment not in tag_info.alignments:
+                    tag_info.alignments.append(image.alignment)
 
             tags_dict[tag].images.append(image)
 
@@ -157,3 +163,48 @@ def generateTagsDict(images):
         continue
 
     return tags_dict
+
+def removeImageFromTagsDict(tags_dict, image):
+    for tag in image.tags:
+        tag_info = tags_dict[tag]
+        tag_info.score -= 1
+        tag_info.images.remove(image)
+        tags_dict[tag] = tag_info
+
+    return tags_dict
+
+def getImageWithTagScore(tags_dict, score, alignment=None):
+    for tag in tags_dict:
+        tag_info = tags_dict[tag]
+
+        if alignment is not None and alignment not in tag_info.alignments:
+            continue
+
+        if tag_info.score == score and alignment is None:
+            return tag_info.images[0]
+        elif tag_info.score == score:
+            for image in tag_info.images:
+                if image.alignment == alignment:
+                    return image
+
+    return None
+
+def getTagsFromSlide(slide):
+    tags = []
+    for image in slide:
+        for tag in image.tags:
+            tags.append(tag)
+
+    return tags
+
+def getNextSlideImage(tags_dict, prev_slide):
+    prev_tags = getTagsFromSlide(prev_slide)
+    next_tag_info = TagInfo()
+    next_tag_info.score = 0
+
+    for prev_tag in prev_tags:
+        tag_info = tags_dict[prev_tag]
+        
+        continue
+
+    return None
