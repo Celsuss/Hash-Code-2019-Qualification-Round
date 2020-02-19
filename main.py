@@ -50,6 +50,7 @@ def createSlides(images):
 
     # Old version
 
+    start_time = time.time()
     tags_info = utils.getTagsInfo(images)
     slides = []
 
@@ -67,10 +68,18 @@ def createSlides(images):
 
     slide = score.getBestNextSlide(slides[-1], images.copy())
 
+    print_step = 10
+    step = 0
+
     while slide is not None and score.calculateScoreBetweenSlides(slides[-1], slide) > 0:
+        step += 1
         slides.append(slide)
         utils.removeSlideImagesFromList(slides[-1], images)
         slide = score.getBestNextSlide(slides[-1], images.copy())
+
+        if step % print_step == 0:
+            print('Current step {}, {} ticks'.format(step, time.time()-start_time))
+
 
     total_score = score.calculateSlidesScore(slides)
 
@@ -82,7 +91,7 @@ def createSlides(images):
 def main():
     image_sets = data.getData()
 
-    for images in image_sets:
+    for images in image_sets[0:2]:
         slides, score = createSlides(images)
 
         continue
