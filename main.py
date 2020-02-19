@@ -3,6 +3,16 @@ import time
 import utils
 import score
 
+def getNextSlide(tags_dict, prev_slide):
+    slide = [utils.getNextSlideImage(tags_dict, prev_slide)]
+
+    # If it's a vertical image then one more vertical image is needed
+    if slide[0].alignment == 'V':
+        utils.removeImageFromTagsDict(tags_dict, slide[0])
+        slide.append(utils.getNextSlideImage(tags_dict, prev_slide, alignment='V'))
+
+    utils.removeImageFromTagsDict(tags_dict, slide[-1])
+    return slide
 
 def createSlides(images):
     start_time = time.time()
@@ -16,10 +26,13 @@ def createSlides(images):
         image = utils.getImageWithTagScore(tags_dict, 2, alignment='V')
 
     slides.append([image])
-    for img in slides[-1]:
-        utils.removeImageFromTagsDict(tags_dict, img)
+    utils.removeSlideImagesFromTagsDict(tags_dict, slides[-1])
 
-    image = utils.getNextSlideImage(tags_dict, slides[-1])
+    while image is not None:
+        slide = getNextSlide(tags_dict, slides[-1])
+        slides.append(slide)
+        continue
+
 
 
     end_time = time.time()

@@ -3,7 +3,7 @@ class TagInfo:
     name = ""
     score = 1
     images = []
-    alignments = []
+    alignment_score_dict = {}
 
 def getTagsInfo(images):
     images_info = {}
@@ -149,12 +149,17 @@ def generateTagsDict(images):
                 tag_info = TagInfo()
                 tag_info.name = tag
                 tag_info.images = []
-                tag_info.alignments = [image.alignment]
+                tag_info.alignment_score_dict = {}
+                tag_info.alignment_score_dict[image.alignment] = 1
+
                 tags_dict[tag] = tag_info
             else:
                 tags_dict[tag].score += 1
-                if image.alignment not in tag_info.alignments:
-                    tag_info.alignments.append(image.alignment)
+
+                if image.alignment not in tag_info.alignment_score_dict:
+                    tag_info.alignment_score_dict[image.alignment] = 1
+                else:
+                    tag_info.alignment_score_dict[image.alignment] += 1
 
             tags_dict[tag].images.append(image)
 
@@ -173,11 +178,21 @@ def removeImageFromTagsDict(tags_dict, image):
 
     return tags_dict
 
+def doTagInfoContainAlignment(tag_info, alignment):
+    if alignment is not None and alignment not in tag_info.alignment_score_dict:
+        return False
+
+    return True
+
+def removeSlideImagesFromTagsDict(tags_dict, slide):
+    for image in slide:
+        removeImageFromTagsDict(tags_dict, image)
+
 def getImageWithTagScore(tags_dict, score, alignment=None):
     for tag in tags_dict:
         tag_info = tags_dict[tag]
 
-        if alignment is not None and alignment not in tag_info.alignments:
+        if doTagInfoContainAlignment(tag_info, alignment) == False:
             continue
 
         if tag_info.score == score and alignment is None:
@@ -197,14 +212,21 @@ def getTagsFromSlide(slide):
 
     return tags
 
-def getNextSlideImage(tags_dict, prev_slide):
+def getNextSlideImage(tags_dict, prev_slide, alignment=None):
     prev_tags = getTagsFromSlide(prev_slide)
     next_tag_info = TagInfo()
     next_tag_info.score = 0
 
     for prev_tag in prev_tags:
         tag_info = tags_dict[prev_tag]
-        
-        continue
 
-    return None
+        if doTagInfoContainAlignment(tag_info, alignment) == False:
+            continue
+
+        if tag_info.score > next_tag_info.score:
+            next_tag_info = tag_info
+
+    if next_tag_info.score == 0:
+        return None
+
+    return next_tag_info.images[0]
