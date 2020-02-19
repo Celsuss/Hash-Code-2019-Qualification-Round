@@ -1,4 +1,8 @@
 
+class TagInfo:
+    name = ""
+    score = 0
+    images = []
 
 def getTagsInfo(images):
     images_info = {}
@@ -133,3 +137,23 @@ def getTagsInSlide(slide):
 def hasOverlappingTags(image_1, image_2):
 
     return 0
+
+def generateTagsDict(images):
+    tags_dict = {}
+    for image in images:
+        for tag in image.tags:
+            if tag not in tags_dict:
+                tag_info = TagInfo()
+                tag_info.name = tag
+                tag_info.images = []
+                tags_dict[tag] = tag_info
+            else:
+                tags_dict[tag].score += 1
+
+            tags_dict[tag].images.append(image)
+
+            continue
+
+        continue
+
+    return tags_dict

@@ -3,6 +3,8 @@ import utils
 import score
 
 def createSlides(images):
+    tags_dict = utils.generateTagsDict(images)
+
     tags_info = utils.getTagsInfo(images)
     slides = []
 
@@ -27,13 +29,13 @@ def createSlides(images):
 
     total_score = score.calculateSlidesScore(slides)
 
-    return total_score
+    return slides, total_score
 
 def main():
     image_sets = data.getData()
 
     for images in image_sets:
-        slides = createSlides(images)
+        slides, score = createSlides(images)
 
         continue
 
