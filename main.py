@@ -68,7 +68,6 @@ def createSlides(images):
 
     slide = score.getBestNextSlide(slides[-1], images.copy())
 
-    print_step = 10
     step = 0
 
     while slide is not None and score.calculateScoreBetweenSlides(slides[-1], slide) > 0:
@@ -77,8 +76,7 @@ def createSlides(images):
         utils.removeSlideImagesFromList(slides[-1], images)
         slide = score.getBestNextSlide(slides[-1], images.copy())
 
-        if step % print_step == 0:
-            print('Current step {}, {} ticks'.format(step, time.time()-start_time))
+        print('Current step {}, {} ticks'.format(step, time.time()-start_time))
 
 
     total_score = score.calculateSlidesScore(slides)
